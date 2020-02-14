@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: getappinfo 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: getappinfo
+  template:
+    metadata:
+      labels:
+        app: getappinfo 
+    spec:
+      containers:
+        - name: getappinfo
+          image: acrPaul.azurecr.io/getappinfo
+          ports:
+          - containerPort: 80

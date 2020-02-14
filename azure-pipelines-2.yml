@@ -1,0 +1,62 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '9b3d1058-9df4-458a-a00c-62dbb707a569'
+  imageRepositoryCheckVatId: 'checkvatid'
+  imageRepositoryGetRates: 'getrates'
+  imageRepositoryGetRatesMongo: 'getratesmongo'
+  imageRepositoryFeedback: 'feedback'
+  containerRegistry: 'acrPaul.azurecr.io'
+  dockerfilePathFeedback: '**/src/Feedback/dockerfile'
+  dockerfilePathGetRates: '**/src/GetRates/dockerfile'
+  dockerfilePathGetRatesMongo: '**/src/GetRatesMongo/dockerfile'
+  dockerfilePathCheckVatId: '**/src/CheckVatId/dockerfile'
+  tag: '$(Build.BuildNumber)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  
+  # Name of the new namespace being created to deploy the PR changes.
+  k8sNamespaceForPR: '$(system.pullRequest.pullRequestNumber)'
+
+stages:
+
+- stage: DeployCheckVatId
+  displayName: Deploy CheckVatId
+
+  jobs:
+  - deployment: DeployCheckVatId
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'VATCompose-1081.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: 'f2141122-609f-47da-b75e-d55a47b955c6'
+              definition: '17'
+              specificBuildWithTriggering: true
+              buildVersionToDownload: 'latest'
+              targetPath: '$(Pipeline.Workspace)'
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/checkvatid-deployment.yaml
+                $(Pipeline.Workspace)/manifests/checkvatid-service.yaml
+              containers: |
+                $(containerRegistry)/$(imageRepositoryCheckVatId):$(tag)
+

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkvatid 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: checkvatid
+  template:
+    metadata:
+      labels:
+        app: checkvatid 
+    spec:
+      containers:
+        - name: checkvatid
+          image: acrsteve.azurecr.io/checkvatid
+          ports:
+          - containerPort: 80

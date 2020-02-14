@@ -1,0 +1,16 @@
+/Users/solaadio/vat/VatDotNetCore/Models/bin/Debug/netcoreapp2.0/Models.deps.json
+/Users/solaadio/vat/VatDotNetCore/Models/bin/Debug/netcoreapp2.0/Models.dll
+/Users/solaadio/vat/VatDotNetCore/Models/bin/Debug/netcoreapp2.0/Models.pdb
+/Users/solaadio/vat/VatDotNetCore/Models/obj/Debug/netcoreapp2.0/Models.csprojAssemblyReference.cache
+/Users/solaadio/vat/VatDotNetCore/Models/obj/Debug/netcoreapp2.0/Models.AssemblyInfoInputs.cache
+/Users/solaadio/vat/VatDotNetCore/Models/obj/Debug/netcoreapp2.0/Models.AssemblyInfo.cs
+/Users/solaadio/vat/VatDotNetCore/Models/obj/Debug/netcoreapp2.0/Models.dll
+/Users/solaadio/vat/VatDotNetCore/Models/obj/Debug/netcoreapp2.0/Models.pdb
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/bin/Debug/netcoreapp2.0/Models.deps.json
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/bin/Debug/netcoreapp2.0/Models.dll
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/bin/Debug/netcoreapp2.0/Models.pdb
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/obj/Debug/netcoreapp2.0/Models.csprojAssemblyReference.cache
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/obj/Debug/netcoreapp2.0/Models.AssemblyInfoInputs.cache
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/obj/Debug/netcoreapp2.0/Models.AssemblyInfo.cs
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/obj/Debug/netcoreapp2.0/Models.dll
+/Users/solaadio/VATCompose/src/GetAppInfo/Models/obj/Debug/netcoreapp2.0/Models.pdb
