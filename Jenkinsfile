@@ -2,6 +2,7 @@ node {
     def appCheckVatId
     def appFeedback
     def appGetAppInfo
+    def appGetRates
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
@@ -63,6 +64,25 @@ node {
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
             appGetAppInfo.push("${env.BUILD_NUMBER}")
             appGetAppInfo.push("latest")
+        }
+    }
+    
+    stage('Build GetRates') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+
+        
+        appGetRates = docker.build("solaadio/getrates", "./src/GetRates")
+    }
+
+    stage('Push image') {
+        /* Finally, we'll push the image with two tags:
+         * First, the incremental build number from Jenkins
+         * Second, the 'latest' tag.
+         * Pushing multiple tags is cheap, as all the layers are reused. */
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            appGetRates.push("${env.BUILD_NUMBER}")
+            appGetRates.00.push("latest")
         }
     }
 }
