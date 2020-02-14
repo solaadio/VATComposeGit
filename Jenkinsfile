@@ -82,7 +82,7 @@ node {
          * Pushing multiple tags is cheap, as all the layers are reused. */
         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
             appGetRates.push("${env.BUILD_NUMBER}")
-            appGetRates.00.push("latest")
+            appGetRates.push("latest")
         }
     }
     
