@@ -11,7 +11,8 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("solaadio/vatcompose")
+        
+        app = docker.build("solaadio/checkvatid", "./src/CheckVatId")
     }
 
     stage('Push image') {
