@@ -85,4 +85,5 @@ node {
             appGetRates.00.push("latest")
         }
     }
+    
 }
