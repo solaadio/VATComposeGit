@@ -5,7 +5,7 @@ node {
     def appGetRates
     def appGetRatesMongo
     
-    def servicePrincipalId = 'azure_service_principal'
+    def servicePrincipalId = '7c60dbaf-c9c2-46e1-905a-f083ad23ecf1	'
     def resourceGroup = 'rgPaul'
     def aks = 'aksPaul'
 
