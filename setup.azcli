@@ -1,15 +1,14 @@
-export rg=rgPaul
-export location=uksouth
-export acr=acrPaul
-export name=aksPaul
-export acrPull=AcrPull
+export rg=rgJenkinsAzure
+export location=westeurope
+export acr=acrJenkinsAzure
+export name=aksJenkinsAzure
+export acrPull=Contributor
 
-export aksDeploy=rbacAksDeploy
 
 az login
 
 az account set \
-  --subscription cb5ab4a7-dd08-4be3-9d7e-9f68ae30f224
+  --subscription e5f7dd5e-1d90-4344-9ad1-39f7811170c0
 
 # Create a resource group $rg on a specific location $location (for example eastus) which will contain the Azure services we need 
 az group create \
@@ -64,7 +63,7 @@ echo $ACR_ID
 
 az role assignment create \
   --assignee $AKS_ID \
-  --role acrpull \
+  --role $acrPull \
   --scope $ACR_ID
 
 az aks use-dev-spaces \

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: getrates 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: getrates
+  template:
+    metadata:
+      labels:
+        app: getrates 
+    spec:
+      containers:
+        - name: getrates 
+          image: acrJenkinsAzure.azurecr.io/getrates:latest
+          ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: getrates
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: getrates
