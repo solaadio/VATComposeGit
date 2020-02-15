@@ -106,7 +106,7 @@ node {
     }
     
 
-    stage('Push GetRates image to Docker hub') {
+    stage('Push GetRatesMongo image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
