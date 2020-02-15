@@ -43,6 +43,7 @@ node {
                     cp -f ../src/CheckVatId/dockerfile .
                     docker build -t "${env.IMAGE_TAG}" ../src/CheckVatId 
                     docker push "${env.IMAGE_TAG}"
+                    docker push "${dockerRegistry}/checkvatid:latest"
                 """
             }
         }
