@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: checkvatid 
-          image: acrPaul.azurecr.io/checkvatid
+          image: acrPaul.azurecr.io/checkvatid:31
           ports:
           - containerPort: 80
 ---
