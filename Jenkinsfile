@@ -44,7 +44,7 @@ node {
             dir('target') {
                 sh """
                     cp -f ../src/CheckVatId/dockerfile .
-                    docker build -t "${env.IMAGE_TAG}" .
+                    docker build -t "${env.IMAGE_TAG}" ../src/CheckVatId/Dockerfile
                     docker push "${env.IMAGE_TAG}"
                 """
             }
