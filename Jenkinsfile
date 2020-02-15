@@ -58,7 +58,7 @@ node {
     acsDeploy azureCredentialsId: servicePrincipalId,
               resourceGroupName: resourceGroup,
               containerService: "${aks} | AKS",
-              configFilePaths: 'src/aks/deployment.yml',
+              configFilePaths: 'manifests/checkvatid.yaml',
               enableConfigSubstitution: true,
               secretName: dockerRegistry,
               containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
