@@ -4,6 +4,15 @@ node {
     def appGetAppInfo
     def appGetRates
     def appGetRatesMongo
+    
+    def servicePrincipalId = 'azure_service_principal'
+    def resourceGroup = 'rgPaul'
+    def aks = 'aksPaul'
+
+    def dockerRegistry = 'acrPaul.azurecr.io'
+    def imageName = "checkvatid:${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
+    def dockerCredentialId = 'acrPaul'
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
@@ -28,6 +37,31 @@ node {
             appCheckVatId.push("${env.BUILD_NUMBER}")
             appCheckVatId.push("latest")
         }
+    }
+    
+    stage('Docker Image') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ./src/CheckVatId .
+                    docker build -t "${env.IMAGE_TAG}" .
+                    docker push "${env.IMAGE_TAG}"
+                """
+            }
+        }
+    }
+    
+    stage('Deploy') {
+    // Apply the deployments to AKS.
+    // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+    // will be replaced with environment variable values
+    acsDeploy azureCredentialsId: servicePrincipalId,
+              resourceGroupName: resourceGroup,
+              containerService: "${aks} | AKS",
+              configFilePaths: 'src/aks/deployment.yml',
+              enableConfigSubstitution: true,
+              secretName: dockerRegistry,
+              containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
     
     stage('Build Feedback') {
