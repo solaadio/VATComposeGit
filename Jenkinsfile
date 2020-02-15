@@ -60,7 +60,6 @@ node {
               containerService: "${aks} | AKS",
               configFilePaths: 'manifests/checkvatid.yaml',
               enableConfigSubstitution: true,
-              secretName: dockerRegistry,
               containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
     
