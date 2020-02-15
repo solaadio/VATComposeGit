@@ -5,14 +5,14 @@ node {
     def appGetRates
     def appGetRatesMongo
     
-    def servicePrincipalId = '7c60dbaf-c9c2-46e1-905a-f083ad23ecf1'
-    def resourceGroup = 'rgPaul'
-    def aks = 'aksPaul'
+    def servicePrincipalId = 'azure_service_principal'
+    def resourceGroup = 'rgJenkinsAzure'
+    def aks = 'aksJenkinsAzure'
 
-    def dockerRegistry = 'acrPaul.azurecr.io'
+    def dockerRegistry = 'acrJenkinsAzure.azurecr.io'
     def imageName = "checkvatid:${env.BUILD_NUMBER}"
     env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
-    def dockerCredentialId = 'acrPaul'
+    def dockerCredentialId = 'acrJenkinsAzure'
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
