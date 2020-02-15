@@ -25,7 +25,7 @@ node {
         appCheckVatId = docker.build("solaadio/checkvatid", "./src/CheckVatId")
     }
 
-    stage('Push image') {
+    stage('Push image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -36,7 +36,7 @@ node {
         }
     }
     
-    stage('Docker Image') {
+    stage('Push Image to ACR') {
         withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
             dir('target') {
                 sh """
