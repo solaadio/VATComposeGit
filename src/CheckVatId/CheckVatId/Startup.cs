@@ -27,7 +27,7 @@ namespace MyFirstDotNetCoreApp
                 {
                     Version = "v1",
                     Title = "VATToolBox ASP.NET Core Web API",
-                    Description = "Implementation of VATToolBox in ASP.NET Core Web API",
+                    Description = "Implementation of VATToolBox in ASP.NET Core Web APIon AKS",
                     TermsOfService = "None",
                     Contact = new Contact
                     {
@@ -59,7 +59,7 @@ namespace MyFirstDotNetCoreApp
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VATToolBox ASP.NET Core Web API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VATToolBox ASP.NET Core Web API on AKS");
                 c.RoutePrefix = string.Empty;
             });
 
