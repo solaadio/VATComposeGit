@@ -55,7 +55,6 @@ node {
         appGetAppInfo = docker.build("solaadio/getappinfo", "./src/GetAppInfo")
     }
 
-    
     stage('Push Checkvatid image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
@@ -67,8 +66,6 @@ node {
         }
     }
     
-
-
     stage('Push Feedback image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
@@ -80,7 +77,6 @@ node {
         }
     }
     
-
     stage('Push AppInfo image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
@@ -91,8 +87,6 @@ node {
             appGetAppInfo.push("latest")
         }
     }
-    
-   
 
     stage('Push GetRates image to Docker hub') {
         /* Finally, we'll push the image with two tags:
