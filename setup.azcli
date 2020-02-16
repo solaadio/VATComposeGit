@@ -15,6 +15,18 @@ az group create \
   -l $location \
   -n $rg
 
+az ad sp create-for-rbac \
+  --skip-assignment \
+  --name myJenkinsServicePrincipal
+{
+  "appId": "d7dc0fa6-96ec-4e02-942b-c603f90aae01",
+  "displayName": "myJenkinsServicePrincipal",
+  "name": "http://myJenkinsServicePrincipal",
+  "password": "e32d5baa-5c26-4947-a797-43507b5e2f42",
+  "tenant": "2107104e-d4f3-468b-9202-8451051cc80a"
+}
+
+
 # Create an ACR registry $acr
 az acr create \
   -n $acr \
@@ -22,16 +34,8 @@ az acr create \
   -l $location \
   --sku Basic
 
-az ad sp create-for-rbac \
-  --skip-assignment \
-  --name myAKSClusterServicePrincipal
-{
-  "appId": "9dd3d822-7db7-4d59-9736-d20778c484f0",
-  "displayName": "myAKSClusterServicePrincipal",
-  "name": "http://myAKSClusterServicePrincipal",
-  "password": "c785b2b3-b77e-44a1-993f-8d052c8b7128",
-  "tenant": "2107104e-d4f3-468b-9202-8451051cc80a"
-}
+
+
 
 # Setup of the AKS cluster
 latestK8sVersion=$(az aks get-versions -l $location --query 'orchestrators[-1].orchestratorVersion' -o tsv)
@@ -44,8 +48,8 @@ az aks create \
     -k 1.14.8 \
     --node-count 1 \
     --node-vm-size Standard_B2s \
-    --service-principal 9dd3d822-7db7-4d59-9736-d20778c484f0 \
-    --client-secret c785b2b3-b77e-44a1-993f-8d052c8b7128
+    --service-principal d7dc0fa6-96ec-4e02-942b-c603f90aae01 \
+    --client-secret e32d5baa-5c26-4947-a797-43507b5e2f42
 
 # Once created (the creation could take ~10 min), get the credentials to interact with your AKS cluster
 

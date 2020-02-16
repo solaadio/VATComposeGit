@@ -1,0 +1,66 @@
+install docker
+==============
+
+Step 1: Update Software Repositories
+It’s a good idea to update the local database of software to make sure you’ve got access to the latest revisions.
+
+Open a terminal window and type:
+
+sudo apt-get update
+Allow the operation to complete.
+
+
+
+Step 2: Uninstall Old Versions of Docker
+Next, it’s recommended to uninstall any old Docker software before proceeding.
+
+Use the command:
+sudo apt-get remove docker docker-engine docker.io
+
+
+
+Step 3: Install Docker
+To install Docker on Ubuntu, in the terminal window enter the command:
+sudo apt install docker.io
+
+
+Step 4: Start and Automate Docker
+The Docker service needs to be setup to run at startup. To do so, type in each command followed by enter:
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+
+
+Install KubeCtl
+===============
+
+For example, to download version v1.17.0 on Linux, type:
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+
+Make the kubectl binary executable.
+chmod +x ./kubectl
+
+Move the binary in to your PATH.
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+Test to ensure the version you installed is up-to-date:
+kubectl version --client
+
+
+Connect Docker properly to Jenkins
+===================================
+sudo gpasswd -a jenkins docker
+
+Edit the following file : vi /usr/lib/systemd/system/docker.service
+
+And edit this rule to expose the API : ExecStart=/usr/bin/docker daemon -H unix:// -H tcp://localhost:2375
+
+Now it’s time to reload and restart your Docker daemon:
+
+systemctl daemon-reload
+systemctl restart docker
+
+Then I restarted jenkins and I was able to perform docker commands as jenkins user in my jenkins jobs
+
+sudo service jenkins restart

@@ -13,8 +13,8 @@ spec:
         app: checkvatid 
     spec:
       containers:
-        - name: checkvatid 
-          image: ${IMAGE_TAG}
+        - name: checkvatid
+          image: acrJenkinsAzure.azurecr.io/checkvatid:latest
           ports:
           - containerPort: 80
 ---
