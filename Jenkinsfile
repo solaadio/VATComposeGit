@@ -97,7 +97,7 @@ node {
             appGetRates.push("latest")
         }
     }
-    
+   
 
     stage('Push GetRatesMongo image to Docker hub') {
         /* Finally, we'll push the image with two tags:
