@@ -5,14 +5,14 @@ node {
     def appGetRates
     def appGetRatesMongo
     
-    def servicePrincipalId = '7c60dbaf-c9c2-46e1-905a-f083ad23ecf1'
-    def resourceGroup = 'rgPaul'
-    def aks = 'aksPaul'
+    def servicePrincipalId = 'azure_service_principal'
+    def resourceGroup = 'rgJenkinsAzure'
+    def aks = 'aksJenkinsAzure'
 
-    def dockerRegistry = 'acrPaul.azurecr.io'
+    def dockerRegistry = 'acrJenkinsAzure.azurecr.io'
     def imageName = "checkvatid:${env.BUILD_NUMBER}"
     env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
-    def dockerCredentialId = 'acrPaul'
+    def dockerCredentialId = 'acrJenkinsAzure'
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
@@ -24,8 +24,39 @@ node {
          * docker build on the command line */
         appCheckVatId = docker.build("solaadio/checkvatid", "./src/CheckVatId")
     }
+    
+    stage('Build Feedback') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+        
+        appFeedback = docker.build("solaadio/feedback", "./src/Feedback")
+    }
 
-    stage('Push image to Docker hub') {
+    stage('Build GetRates') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+
+        
+        appGetRates = docker.build("solaadio/getrates", "./src/GetRates")
+    }
+    
+    stage('Build GetRatesMongo') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+        
+        appGetRatesMongo = docker.build("solaadio/getratesmongo", "./src/GetRatesMongo")
+    }
+
+    stage('Build GetAppInfo') {
+        /* This builds the actual image; synonymous to
+         * docker build on the command line */
+
+        
+        appGetAppInfo = docker.build("solaadio/getappinfo", "./src/GetAppInfo")
+    }
+
+    
+    stage('Push Checkvatid image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -36,41 +67,9 @@ node {
         }
     }
     
-    stage('Push Image to ACR') {
-        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
-            dir('target') {
-                sh """
-                    cp -f ../src/CheckVatId/dockerfile .
-                    docker build -t "${env.IMAGE_TAG}" ../src/CheckVatId 
-                    docker push "${env.IMAGE_TAG}"
-                    docker build -t "${dockerRegistry}/checkvatid:latest" ../src/CheckVatId 
-                    docker push "${dockerRegistry}/checkvatid:latest"
-                """
-            }
-        }
-    }
-    
-    stage('Deploy') {
-    // Apply the deployments to AKS.
-    // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
-    // will be replaced with environment variable values
-    acsDeploy azureCredentialsId: servicePrincipalId,
-              resourceGroupName: resourceGroup,
-              containerService: "${aks} | AKS",
-              configFilePaths: 'manifests/checkvatid.yaml',
-              enableConfigSubstitution: true,
-              containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
-    }
-    
-    stage('Build Feedback') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
 
-        
-        appFeedback = docker.build("solaadio/feedback", "./src/Feedback")
-    }
 
-    stage('Push image') {
+    stage('Push Feedback image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -81,15 +80,8 @@ node {
         }
     }
     
-    stage('Build GetAppInfo') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
 
-        
-        appGetAppInfo = docker.build("solaadio/getappinfo", "./src/GetAppInfo")
-    }
-
-    stage('Push image') {
+    stage('Push AppInfo image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -100,15 +92,9 @@ node {
         }
     }
     
-    stage('Build GetRates') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
+   
 
-        
-        appGetRates = docker.build("solaadio/getrates", "./src/GetRates")
-    }
-
-    stage('Push image') {
+    stage('Push GetRates image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -119,15 +105,8 @@ node {
         }
     }
     
-    stage('Build GetRatesMongo') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
 
-        
-        appGetRatesMongo = docker.build("solaadio/getratesmongo", "./src/GetRatesMongo")
-    }
-
-    stage('Push image') {
+    stage('Push GetRatesMongo image to Docker hub') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
@@ -137,5 +116,136 @@ node {
             appGetRatesMongo.push("latest")
         }
     }
+        
     
+    stage('Push Checkvatid Image to ACR') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ../src/CheckVatId/dockerfile .
+                    docker build -t "${dockerRegistry}/checkvatid:${env.BUILD_NUMBER}" ../src/CheckVatId 
+                    docker push "${dockerRegistry}/checkvatid:${env.BUILD_NUMBER}"
+                    docker build -t "${dockerRegistry}/checkvatid:latest" ../src/CheckVatId 
+                    docker push "${dockerRegistry}/checkvatid:latest"
+                """
+            }
+        }
+    }
+    
+    stage('Push Feedback Image to ACR') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ../src/Feedback/dockerfile .
+                    docker build -t "${dockerRegistry}/feedback:${env.BUILD_NUMBER}" ../src/Feedback 
+                    docker push "${dockerRegistry}/feedback:${env.BUILD_NUMBER}"
+                    docker build -t "${dockerRegistry}/feedback:latest" ../src/Feedback 
+                    docker push "${dockerRegistry}/feedback:latest"
+                """
+            }
+        }
+    }
+    
+    stage('Push GetRates Image to ACR') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ../src/GetRates/dockerfile .
+                    docker build -t "${dockerRegistry}/getrates:${env.BUILD_NUMBER}" ../src/GetRates 
+                    docker push "${dockerRegistry}/getrates:${env.BUILD_NUMBER}"
+                    docker build -t "${dockerRegistry}/getrates:latest" ../src/GetRates 
+                    docker push "${dockerRegistry}/getrates:latest"
+                """
+            }
+        }
+    }
+    
+    stage('Push GetRatesMongo Image to ACR') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ../src/GetRatesMongo/dockerfile .
+                    docker build -t "${dockerRegistry}/getratesmongo:${env.BUILD_NUMBER}" ../src/GetRatesMongo 
+                    docker push "${dockerRegistry}/getratesmongo:${env.BUILD_NUMBER}"
+                    docker build -t "${dockerRegistry}/getratesmongo:latest" ../src/GetRatesMongo 
+                    docker push "${dockerRegistry}/getratesmongo:latest"
+                """
+            }
+        }
+    }
+    
+    stage('Push GetAppInfo Image to ACR') {
+        withDockerRegistry([credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]) {
+            dir('target') {
+                sh """
+                    cp -f ../src/GetAppInfo/dockerfile .
+                    docker build -t "${dockerRegistry}/getappinfo:${env.BUILD_NUMBER}" ../src/CheckVatId 
+                    docker push "${dockerRegistry}/getappinfo:${env.BUILD_NUMBER}"
+                    docker build -t "${dockerRegistry}/getappinfo:latest" ../src/CheckVatId 
+                    docker push "${dockerRegistry}/getappinfo:latest"
+                """
+            }
+        }
+    }
+    
+    
+    stage('Deploy Checkvatid to AKS') {
+        // Apply the deployments to AKS.
+        // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+        // will be replaced with environment variable values
+        acsDeploy azureCredentialsId: servicePrincipalId,
+                  resourceGroupName: resourceGroup,
+                  containerService: "${aks} | AKS",
+                  configFilePaths: 'manifests/checkvatid.yaml',
+                  enableConfigSubstitution: true,
+                  containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
+    }
+    
+    stage('Deploy Feedback to AKS') {
+        // Apply the deployments to AKS.
+        // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+        // will be replaced with environment variable values
+        acsDeploy azureCredentialsId: servicePrincipalId,
+                  resourceGroupName: resourceGroup,
+                  containerService: "${aks} | AKS",
+                  configFilePaths: 'manifests/feedback.yaml',
+                  enableConfigSubstitution: true,
+                  containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
+    }
+
+    stage('Deploy GetRates to AKS') {
+        // Apply the deployments to AKS.
+        // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+        // will be replaced with environment variable values
+        acsDeploy azureCredentialsId: servicePrincipalId,
+                  resourceGroupName: resourceGroup,
+                  containerService: "${aks} | AKS",
+                  configFilePaths: 'manifests/getrates.yaml',
+                  enableConfigSubstitution: true,
+                  containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
+    }
+    stage('Deploy GetRatesMongo to AKS') {
+        // Apply the deployments to AKS.
+        // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+        // will be replaced with environment variable values
+        acsDeploy azureCredentialsId: servicePrincipalId,
+                  resourceGroupName: resourceGroup,
+                  containerService: "${aks} | AKS",
+                  configFilePaths: 'manifests/getratesmongo.yaml',
+                  enableConfigSubstitution: true,
+                  containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
+    }
+
+    stage('Deploy GetAppInfo to AKS') {
+        // Apply the deployments to AKS.
+        // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
+        // will be replaced with environment variable values
+        acsDeploy azureCredentialsId: servicePrincipalId,
+                  resourceGroupName: resourceGroup,
+                  containerService: "${aks} | AKS",
+                  configFilePaths: 'manifests/getappinfo.yaml',
+                  enableConfigSubstitution: true,
+                  containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
+    }
+
 }

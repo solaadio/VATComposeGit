@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: getappinfo
-          image: acrPaul.azurecr.io/getappinfo
+          image: acrJenkinsAzure.azurecr.io/getappinfo:latest
           ports:
           - containerPort: 80
 ---
