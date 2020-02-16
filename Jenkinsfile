@@ -36,7 +36,6 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        
         appGetRates = docker.build("solaadio/getrates", "./src/GetRates")
     }
     
