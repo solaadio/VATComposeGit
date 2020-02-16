@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: getrates 
-          image: acrJenkinsAzure.azurecr.io/getrates:latest
+          image: ${IMAGE_TAG}
           ports:
           - containerPort: 80
 ---

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: feedback 
-          image: acrJenkinsAzure.azurecr.io/feedback:latest
+          image: ${IMAGE_TAG}
           ports:
           - containerPort: 80
 ---

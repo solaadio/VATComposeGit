@@ -193,6 +193,8 @@ node {
                   containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
     
+    imageName = "feedback:${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
     stage('Deploy Feedback to AKS') {
         // Apply the deployments to AKS.
         // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
@@ -205,6 +207,8 @@ node {
                   containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
 
+    imageName = "getrates:${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
     stage('Deploy GetRates to AKS') {
         // Apply the deployments to AKS.
         // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
@@ -216,6 +220,9 @@ node {
                   enableConfigSubstitution: true,
                   containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
+
+    imageName = "getratesmongo:${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
     stage('Deploy GetRatesMongo to AKS') {
         // Apply the deployments to AKS.
         // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}
@@ -228,6 +235,8 @@ node {
                   containerRegistryCredentials: [[credentialsId: dockerCredentialId, url: "http://${dockerRegistry}"]]
     }
 
+    imageName = "getappinfo:${env.BUILD_NUMBER}"
+    env.IMAGE_TAG = "${dockerRegistry}/${imageName}"
     stage('Deploy GetAppInfo to AKS') {
         // Apply the deployments to AKS.
         // With enableConfigSubstitution set to true, the variables ${TARGET_ROLE}, ${IMAGE_TAG}, ${KUBERNETES_SECRET_NAME}

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: getratesmongo 
-          image: acrJenkinsAzure.azurecr.io/getratesmongo:latest
+          image: ${IMAGE_TAG}
           ports:
           - containerPort: 80
 ---
