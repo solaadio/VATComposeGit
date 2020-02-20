@@ -1,22 +1,6 @@
 version: '3'
 
 services:
-  checkvatid:
-    build: ./CheckVatId
-    image: logion/checkvatid:v1
-    ports: 
-      - 5000:80
-    networks:
-      - front
-
-  feedback:
-    build: ./Feedback
-    image: logion/feedback:v1
-    ports: 
-      - 5001:80
-    networks:
-      - front
-
   getappinfo:
     build: ./GetAppInfo
     image: logion/getappinfo:v1
@@ -24,25 +8,6 @@ services:
       - 5002:80
     networks:
       - front
-
-  # no port redirection is defined, so it is not externally accessible
-  getrates:
-    build: ./GetRates
-    image: logion/getrates:v1
-    networks:
-      - back
-
-  getratesmongo:
-    build: ./GetRatesMongo
-    image: logion/getratesmongo:v1
-    ports: 
-      - 5004:80
-    networks:
-      - front
-      - back
-
 networks:
   front:
-    driver: bridge
-  back:
     driver: bridge
