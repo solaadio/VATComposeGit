@@ -38,9 +38,9 @@ node {
             dir('target') {
                 sh """
                     cp -f ../src/GetAppInfo/dockerfile .
-                    docker build -t "${dockerRegistry}/getappinfo:${env.BUILD_NUMBER}" ../src/CheckVatId 
+                    docker build -t "${dockerRegistry}/getappinfo:${env.BUILD_NUMBER}" ../src/GetAppInfo 
                     docker push "${dockerRegistry}/getappinfo:${env.BUILD_NUMBER}"
-                    docker build -t "${dockerRegistry}/getappinfo:latest" ../src/CheckVatId 
+                    docker build -t "${dockerRegistry}/getappinfo:latest" ../src/GetAppInfo 
                     docker push "${dockerRegistry}/getappinfo:latest"
                 """
             }
